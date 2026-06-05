@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/docs/instructor/slides/index.html"
+    }
+  ]
+}

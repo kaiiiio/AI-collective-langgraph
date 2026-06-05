@@ -1,0 +1,15 @@
+services:
+  lab:
+    build: .
+    environment:
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-langgraph-learning-lab}
+    command: python modules/10_capstone_project/main.py
+  test:
+    build: .
+    environment:
+      LANGSMITH_TRACING: ${LANGSMITH_TRACING:-false}
+      LANGSMITH_API_KEY: ${LANGSMITH_API_KEY:-}
+      LANGSMITH_PROJECT: ${LANGSMITH_PROJECT:-langgraph-learning-lab}
+    command: python -m pytest -q

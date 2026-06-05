@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+show_help() {
+  cat <<'EOF'
+LangGraph Learning Lab
+
+Usage:
+  ./lab build
+  ./lab list
+  ./lab module 1
+  ./lab 1
+  ./lab capstone
+  ./lab test
+  ./lab ruff
+  ./lab mypy
+  ./lab down
+EOF
+}
+
+module_path() {
+  case "$1" in
+    1) echo "modules/01_hello_graph/main.py" ;;
+    2) echo "modules/02_state_management/main.py" ;;
+    3) echo "modules/03_conditional_edges/main.py" ;;
+    4) echo "modules/04_tools/main.py" ;;
+    5) echo "modules/05_memory/main.py" ;;
+    6) echo "modules/06_agent/main.py" ;;
+    7) echo "modules/07_multi_agent/main.py" ;;
+    8) echo "modules/08_human_review/main.py" ;;
+    9) echo "modules/09_langsmith/main.py" ;;
+    10) echo "modules/10_capstone_project/main.py" ;;
+    *) echo "Unknown module: $1" >&2; exit 1 ;;
+  esac
+}
+
+list_modules() {
+  cat <<'EOF'
+1  01_hello_graph         Graph, node, edge, execution flow
+2  02_state_management    Typed state before and after execution
+3  03_conditional_edges   Routing to joke or fact branch
+4  04_tools               Calculator, weather mock, stock mock
+5  05_memory              Conversation memory
+6  06_agent               Tool selection and answer flow
+7  07_multi_agent         Research, writer, reviewer agents
+8  08_human_review        Approval before publish
+9  09_langsmith           Tracing and observability
+10 10_capstone_project    AI research assistant
+EOF
+}
+
+command="${1:-help}"
+
+case "$command" in
+  help|-h|--help)
+    show_help
+    ;;
+  build)
+    docker compose build
+    ;;
+  list)
+    list_modules
+    ;;
+  module)
+    if [[ $# -lt 2 ]]; then
+      echo "Usage: ./lab module <1-10>" >&2
+      exit 1
+    fi
+    docker compose run --rm lab python "$(module_path "$2")"
+    ;;
+  [1-9]|10)
+    docker compose run --rm lab python "$(module_path "$command")"
+    ;;
+  capstone)
+    docker compose run --rm lab python "$(module_path 10)"
+    ;;
+  test)
+    docker compose run --rm test
+    ;;
+  ruff)
+    docker compose run --rm lab ruff check .
+    ;;
+  mypy)
+    docker compose run --rm lab mypy app
+    ;;
+  down)
+    docker compose down
+    ;;
+  *)
+    echo "Unknown command: $*" >&2
+    show_help >&2
+    exit 1
+    ;;
+esac

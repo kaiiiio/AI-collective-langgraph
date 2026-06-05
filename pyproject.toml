@@ -1,0 +1,28 @@
+[project]
+name = "langgraph-learning-lab"
+version = "0.1.0"
+description = "Bootcamp-ready LangGraph and LangSmith learning repository"
+requires-python = ">=3.12"
+dependencies = [
+  "langgraph>=0.2.0",
+  "langchain>=0.3.0",
+  "langsmith>=0.1.0",
+  "pydantic>=2.8.0",
+  "pydantic-settings>=2.4.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
