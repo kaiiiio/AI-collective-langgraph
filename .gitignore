@@ -11,7 +11,6 @@ desktop-contact-sheet.png
 docs/slides/*-preview.png
 docs/slides/screenshots/
 docs/slides/qa/
-docs/slides
 # Local editor and OS noise
 .DS_Store
 Thumbs.db

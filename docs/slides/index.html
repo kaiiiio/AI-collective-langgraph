@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="LangGraph and LangSmith presentation using real AI workflow case studies."
+    />
+    <title>LangGraph and LangSmith: Reliable AI Workflows</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient-grid" aria-hidden="true"></div>
+    <div class="orbital orbital-one" aria-hidden="true"></div>
+    <div class="orbital orbital-two" aria-hidden="true"></div>
+
+    <main class="deck" aria-live="polite">
+      <section class="slide hero-slide" data-title="Reliable AI Workflows">
+        <div class="slide-grid two-col">
+          <div class="copy">
+            <p class="eyebrow">LangGraph + LangSmith</p>
+            <h1><span>Reliable AI</span><span>Workflows</span></h1>
+            <p class="lede">How to turn messy AI steps into visible, testable, retryable workflows using two real project examples.</p>
+          </div>
+          <div class="visual capstone-map rich">
+            <span>State<br /><small>shared data</small></span>
+            <span>Nodes<br /><small>bounded work</small></span>
+            <span>Routes<br /><small>decisions</small></span>
+            <span>Traces<br /><small>observability</small></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="The Real Problem">
+        <div class="copy wide">
+          <p class="eyebrow">Workflow pressure</p>
+          <h2>The hard part is not calling the model</h2>
+          <p class="lede">The hard part is controlling what happens before and after the model: data loading, prompting, parsing, validation, retries, human approval, saving, monitoring, and debugging.</p>
+          <div class="takeaway">LangGraph structures the workflow. LangSmith shows what happened inside it.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Two Real Projects">
+        <div class="copy wide">
+          <p class="eyebrow">Case studies</p>
+          <h2>Two projects, same architecture lesson</h2>
+          <div class="comparison-grid detailed">
+            <article><h3>AI content generation</h3><p>Generate business and location pages at scale.</p><p>Needs JSON repair, retries, schema validation, bulk jobs, and monitoring.</p></article>
+            <article><h3>VARA licensing workflow</h3><p>Prepare regulated licensing submissions with evidence and review.</p><p>Needs state, routing, approvals, auditability, and human-in-the-loop.</p></article>
+            <article><h3>LangGraph + LangSmith</h3><p>LangGraph makes the steps explicit.</p><p>LangSmith makes the runs traceable, evaluable, and monitorable.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangGraph Mental Model">
+        <div class="copy wide">
+          <p class="eyebrow">Core idea</p>
+          <h2>LangGraph is workflow control for AI systems</h2>
+          <pre><code>State
+  -> Node
+  -> State update
+  -> Edge chooses next node
+  -> Repeat until END</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>same state object, with new fields added after each node</code></div>
+            <div><strong>What it means</strong><span>LangGraph is controlled state movement. Every node receives state and returns the part it changed.</span></div>
+          </div>
+          <div class="takeaway">Every slide after this asks one question: what changed in state?</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Full Minimal Code">
+        <div class="copy wide">
+          <p class="eyebrow">Complete starter</p>
+          <h2>A full tiny LangGraph app</h2>
+          <pre><code>from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+class DemoState(TypedDict, total=False):
+    user_message: str
+    response: str
+
+def answer_node(state: DemoState) -> dict:
+    # Read state, do one job, return only the update.
+    return {"response": f"Received: {state['user_message']}"}
+
+graph = StateGraph(DemoState)
+graph.add_node("answer", answer_node)
+graph.add_edge(START, "answer")
+graph.add_edge("answer", END)
+
+app = graph.compile()
+print(app.invoke({"user_message": "hello"}))</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>{"user_message": "hello", "response": "Received: hello"}</code></div>
+            <div><strong>What it means</strong><span>The graph did not replace normal Python. It ran one function, merged the returned field into state, and ended with a larger state object.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Multi-Node Code">
+        <div class="copy wide">
+          <p class="eyebrow">Connected functions</p>
+          <h2>Multi-node graphs are still simple</h2>
+          <pre><code>from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+class PageState(TypedDict, total=False):
+    company_id: str
+    context: str
+    prompt: str
+    raw_response: str
+
+def fetch_context(state: PageState) -> dict:
+    return {"context": f"Context for {state['company_id']}"}
+
+def build_prompt(state: PageState) -> dict:
+    return {"prompt": f"Write page using {state['context']}"}
+
+def call_model(state: PageState) -> dict:
+    return {"raw_response": "{...model json...}"}
+
+graph = StateGraph(PageState)
+graph.add_node("fetch_context", fetch_context)
+graph.add_node("build_prompt", build_prompt)
+graph.add_node("call_model", call_model)
+graph.add_edge(START, "fetch_context")
+graph.add_edge("fetch_context", "build_prompt")
+graph.add_edge("build_prompt", "call_model")
+graph.add_edge("call_model", END)</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>{"company_id": "acme", "context": "...", "prompt": "...", "raw_response": "{...model json...}"}</code></div>
+            <div><strong>What it means</strong><span>Each node adds one useful field. By the model call, the state contains everything the next step needs.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Project 1 Flow">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1: content generation</p>
+          <h2>Business content generation is already a graph</h2>
+          <pre><code>Start content request
+  -> Fetch company, suburb, or province data
+  -> Build structured SEO prompt
+  -> Call OpenAI or Gemini provider
+  -> Parse JSON response
+  -> Repair or retry if broken
+  -> Enforce expected schema
+  -> Save generated content
+  -> Update bulk job progress
+  -> End</code></pre>
+          <div class="explain-strip"><strong>Graph view:</strong> every arrow can become a named node or route. If one step fails, you know exactly where the workflow stopped.</div>
+          <div class="takeaway">The model call is one step. The workflow around it is the real engineering.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Content State">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1 state</p>
+          <h2>The content workflow state</h2>
+          <pre><code>from typing import TypedDict, Any
+
+class ContentState(TypedDict, total=False):
+    company_id: str
+    location_id: str
+    location_type: str
+    theme: str
+    company_info: dict[str, Any]
+    location_info: dict[str, Any]
+    prompt: str
+    raw_ai_response: str
+    parsed_content: dict[str, Any]
+    validation_errors: list[str]
+    retry_count: int
+    final_content: dict[str, Any]
+    progress_id: str</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>After parsing: parsed_content or validation_errors is added.</code></div>
+            <div><strong>What it means</strong><span>State is the shared memory of one run. It carries request data, intermediate AI output, errors, retries, and the final saved result.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Content Nodes">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1 nodes</p>
+          <h2>Each service step becomes a node</h2>
+          <div class="trace-window rich">
+            <div><strong>load_context</strong><span>adds company_info and location_info</span></div>
+            <div><strong>build_prompt</strong><span>adds prompt</span></div>
+            <div><strong>call_ai_provider</strong><span>adds raw_ai_response</span></div>
+            <div><strong>parse_json</strong><span>adds parsed_content or validation_errors</span></div>
+          </div>
+          <div class="takeaway">This replaces hidden control flow with named, inspectable steps.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Parse JSON Node">
+        <div class="copy wide">
+          <p class="eyebrow">Real failure path</p>
+          <h2>Broken JSON gets its own node</h2>
+          <pre><code>import json
+from typing import Any
+
+def parse_json_node(state: ContentState) -> dict[str, Any]:
+    # Keep parsing separate so failure can route cleanly.
+    try:
+        parsed = json.loads(state["raw_ai_response"])
+        return {
+            "parsed_content": parsed,
+            "validation_errors": [],
+        }
+    except json.JSONDecodeError as error:
+        return {
+            "validation_errors": [f"json_error: {error}"],
+        }</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>Valid JSON -> {"parsed_content": ..., "validation_errors": []}
+Broken JSON -> {"validation_errors": ["json_error: ..."]}</code></div>
+            <div><strong>What it means</strong><span>The node records failure in state instead of hiding it. The next edge can now decide whether to retry, repair, or fail cleanly.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Conditional Retry Code">
+        <div class="copy wide">
+          <p class="eyebrow">Conditional edge</p>
+          <h2>Route invalid JSON to repair or failure</h2>
+          <pre><code>def route_after_parse(state: ContentState) -> str:
+    has_errors = bool(state.get("validation_errors"))
+    retries = state.get("retry_count", 0)
+
+    if has_errors and retries &lt; 2:
+        return "repair_json"
+
+    if has_errors:
+        return "mark_failed"
+
+    return "enforce_schema"</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>retry_count 0 + errors -> repair_json
+retry_count 2 + errors -> mark_failed
+no errors -> enforce_schema</code></div>
+            <div><strong>What it means</strong><span>A conditional edge is just a small router function. It turns messy runtime situations into explicit workflow paths.</span></div>
+          </div>
+          <div class="takeaway">Conditional edges are just decisions based on state.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Content Graph Code">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1 graph</p>
+          <h2>Build the content generation graph</h2>
+          <pre><code>from langgraph.graph import StateGraph, START, END
+
+graph = StateGraph(ContentState)
+graph.add_node("load_context", load_context_node)
+graph.add_node("build_prompt", build_prompt_node)
+graph.add_node("call_ai", call_ai_node)
+graph.add_node("parse_json", parse_json_node)
+graph.add_node("repair_json", repair_json_node)
+graph.add_node("enforce_schema", enforce_schema_node)
+graph.add_node("save_content", save_content_node)
+graph.add_node("mark_failed", mark_failed_node)
+
+graph.add_edge(START, "load_context")
+graph.add_edge("load_context", "build_prompt")
+graph.add_edge("build_prompt", "call_ai")
+graph.add_edge("call_ai", "parse_json")</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>A compiled graph with named nodes: load_context -> build_prompt -> call_ai -> parse_json</code></div>
+            <div><strong>What it means</strong><span>This is the workflow skeleton. The next slide adds the routes that make it robust when the model response is invalid.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Content Conditional Edges">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1 routing</p>
+          <h2>Add retry and save routes</h2>
+          <pre><code>graph.add_conditional_edges(
+    "parse_json",
+    route_after_parse,
+    {
+        "repair_json": "repair_json",
+        "mark_failed": "mark_failed",
+        "enforce_schema": "enforce_schema",
+    },
+)
+
+graph.add_edge("repair_json", "call_ai")
+graph.add_edge("enforce_schema", "save_content")
+graph.add_edge("save_content", END)
+graph.add_edge("mark_failed", END)
+
+content_app = graph.compile()</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>Valid run -> save_content -> END
+Invalid run -> repair_json -> call_ai
+Repeated invalid run -> mark_failed -> END</code></div>
+            <div><strong>What it means</strong><span>The retry loop is visible. Students can trace exactly why a page was saved, repaired, or marked failed.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Why LangGraph Helps Project 1">
+        <div class="copy wide">
+          <p class="eyebrow">Project 1 lesson</p>
+          <h2>Content generation becomes controllable</h2>
+          <div class="cards three detailed">
+            <article><h3>Visible retries</h3><p>Broken JSON routes to repair instead of hiding inside service code.</p></article>
+            <article><h3>Schema gates</h3><p>Invalid structure blocks saving until the content is fixed or marked failed.</p></article>
+            <article><h3>Bulk progress</h3><p>Every generated page can update progress with success, retry, or failure status.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Project 2 Flow">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2: VARA licensing</p>
+          <h2>Regulatory licensing is not one prompt</h2>
+          <pre><code>Client intake
+  -> Required document readiness
+  -> Document indexing and retrieval prep
+  -> License activity classification
+  -> Policy generation
+  -> Operational diagram generation
+  -> Regulatory mapping
+  -> Gap analysis
+  -> Human gap decisions
+  -> Submission package export
+  -> Feedback and remediation</code></pre>
+          <div class="explain-strip"><strong>Graph view:</strong> evidence, policy work, gaps, and human decisions should be separate steps so the workflow can be reviewed later.</div>
+          <div class="takeaway">This needs order, validation, evidence, auditability, and human approval.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Licensing State">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2 state</p>
+          <h2>The licensing workflow state</h2>
+          <pre><code>from typing import TypedDict, Any
+
+class LicensingCaseState(TypedDict, total=False):
+    case_id: str
+    applicant_profile: dict[str, Any]
+    uploaded_documents: list[str]
+    indexed_chunks: list[str]
+    classification: dict[str, Any]
+    required_policies: list[str]
+    generated_policies: list[str]
+    regulatory_mappings: list[dict[str, Any]]
+    gap_findings: list[dict[str, Any]]
+    human_decisions: list[dict[str, Any]]
+    submission_package: str
+    errors: list[str]</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>After gap analysis: gap_findings is added.
+After review: human_decisions is added.</code></div>
+            <div><strong>What it means</strong><span>The state separates facts, AI analysis, and human judgment. That makes a regulated workflow easier to audit.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Licensing Nodes">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2 nodes</p>
+          <h2>Each AI responsibility is bounded</h2>
+          <div class="cards three detailed">
+            <article><h3>Classification node</h3><p>Reads profile and evidence. Writes activity, confidence, citations.</p></article>
+            <article><h3>Mapping node</h3><p>Reads policies and rule chunks. Writes rule mappings and rationales.</p></article>
+            <article><h3>Gap node</h3><p>Reads evidence and mappings. Writes severity and remediation actions.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Evidence Route Code">
+        <div class="copy wide">
+          <p class="eyebrow">Safety route</p>
+          <h2>Do not continue without evidence</h2>
+          <pre><code>def route_after_classification(state: LicensingCaseState) -> str:
+    result = state["classification"]
+
+    has_evidence = bool(result.get("evidence"))
+    confident = result.get("confidence", 0.0) &gt;= 0.75
+
+    if has_evidence and confident:
+        return "generate_policies"
+
+    return "human_review"</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>evidence + confidence >= 0.75 -> generate_policies
+missing evidence or low confidence -> human_review</code></div>
+            <div><strong>What it means</strong><span>The graph refuses to continue when classification is weak. This is the approval gate in code.</span></div>
+          </div>
+          <div class="takeaway">Unsupported AI output should not unlock the next regulated step.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Human Review Code">
+        <div class="copy wide">
+          <p class="eyebrow">Human-in-the-loop</p>
+          <h2>Human decisions become graph state</h2>
+          <pre><code>def human_gap_review_node(state: LicensingCaseState) -> dict:
+    high_risk = [
+        gap for gap in state.get("gap_findings", [])
+        if gap.get("severity") in {"high", "critical"}
+    ]
+
+    return {
+        "review_required": len(high_risk) &gt; 0,
+        "open_high_risk_gaps": high_risk,
+    }</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>{"review_required": true, "open_high_risk_gaps": [...]}</code></div>
+            <div><strong>What it means</strong><span>Human review becomes graph state. The workflow can pause, resume, export, or route based on review status.</span></div>
+          </div>
+          <div class="takeaway">AI recommends. Humans own regulatory judgment.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Licensing Graph Code">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2 graph</p>
+          <h2>Build the regulated workflow graph</h2>
+          <pre><code>from langgraph.graph import StateGraph, START, END
+
+graph = StateGraph(LicensingCaseState)
+graph.add_node("validate_intake", validate_intake_node)
+graph.add_node("index_documents", index_documents_node)
+graph.add_node("classify_activity", classify_activity_node)
+graph.add_node("generate_policies", generate_policies_node)
+graph.add_node("map_rules", map_rules_node)
+graph.add_node("analyze_gaps", analyze_gaps_node)
+graph.add_node("human_review", human_gap_review_node)
+graph.add_node("export_package", export_package_node)
+
+graph.add_edge(START, "validate_intake")
+graph.add_edge("validate_intake", "index_documents")
+graph.add_edge("index_documents", "classify_activity")</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>validate_intake -> index_documents -> classify_activity</code></div>
+            <div><strong>What it means</strong><span>The graph starts with evidence preparation before asking the AI to classify anything.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Licensing Conditional Edges">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2 routing</p>
+          <h2>Approval gates are graph routes</h2>
+          <pre><code>graph.add_conditional_edges(
+    "classify_activity",
+    route_after_classification,
+    {
+        "generate_policies": "generate_policies",
+        "human_review": "human_review",
+    },
+)
+
+graph.add_edge("generate_policies", "map_rules")
+graph.add_edge("map_rules", "analyze_gaps")
+graph.add_edge("analyze_gaps", "human_review")
+graph.add_edge("human_review", "export_package")
+graph.add_edge("export_package", END)
+
+licensing_app = graph.compile()</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>Strong evidence -> policy/mapping/gap path
+Weak evidence -> human_review path</code></div>
+            <div><strong>What it means</strong><span>The route protects downstream work. The graph only advances automatically when the state supports it.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Why LangGraph Helps Project 2">
+        <div class="copy wide">
+          <p class="eyebrow">Project 2 lesson</p>
+          <h2>Regulated AI needs controlled structure</h2>
+          <div class="cards three detailed">
+            <article><h3>Evidence gates</h3><p>Unsupported classifications route to human review instead of continuing.</p></article>
+            <article><h3>Auditability</h3><p>Each node writes a clear output that can be inspected later.</p></article>
+            <article><h3>Human control</h3><p>Gaps and high-risk decisions become explicit workflow checkpoints.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangSmith Mental Model">
+        <div class="copy wide">
+          <p class="eyebrow">Observability</p>
+          <h2>LangSmith is the control room</h2>
+          <pre><code>Trace: one workflow run
+  Node run: load_context
+  Node run: build_prompt
+  Model run: call_ai_provider
+  Node run: parse_json
+  Node run: repair_json
+  Tool run: schema_check
+  Node run: save_content</code></pre>
+          <div class="explain-strip"><strong>Trace view:</strong> a LangSmith trace is a timeline of one run. It shows which node ran, what it received, what it returned, and where time/cost/errors happened.</div>
+          <div class="takeaway">LangGraph controls the path. LangSmith shows the evidence.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangSmith Tracing Code">
+        <div class="copy wide">
+          <p class="eyebrow">Tracing code</p>
+          <h2>Trace important functions</h2>
+          <pre><code>from langsmith import traceable
+
+@traceable(name="Generate SEO content")
+def generate_content(prompt: str) -> str:
+    return ai_provider.generate(prompt)
+
+@traceable(name="Classify VARA activity")
+def classify_activity(profile: dict, chunks: list[str]) -> dict:
+    return classifier.invoke({
+        "profile": profile,
+        "evidence": chunks,
+    })</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>LangSmith trace names:
+- Generate SEO content
+- Classify VARA activity</code></div>
+            <div><strong>What it means</strong><span>The function still runs normally, but LangSmith records it as a named trace/span so debugging is readable.</span></div>
+          </div>
+          <div class="takeaway">Good trace names make debugging readable.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangSmith Setup">
+        <div class="copy wide">
+          <p class="eyebrow">Docker-friendly tracing</p>
+          <h2>Set up tracing through environment variables</h2>
+          <pre><code># .env
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=your_key
+LANGSMITH_PROJECT=langgraph-learning-lab
+
+# Docker Compose passes these into the container.
+.\lab.cmd module 9</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>Container receives LANGSMITH_TRACING, LANGSMITH_API_KEY, and LANGSMITH_PROJECT.</code></div>
+            <div><strong>What it means</strong><span>Tracing is configured at runtime. The graph code stays clean and the API key stays out of source files.</span></div>
+          </div>
+          <div class="takeaway">Configuration enters through `.env`, not hardcoded graph nodes.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangSmith Debugging">
+        <div class="copy wide">
+          <p class="eyebrow">Debugging</p>
+          <h2>Questions LangSmith answers</h2>
+          <div class="cards three detailed">
+            <article><h3>Content project</h3><p>Which prompt caused broken JSON? Did repair improve the output?</p></article>
+            <article><h3>Bulk generation</h3><p>Which locations failed repeatedly? Which provider was slower?</p></article>
+            <article><h3>Licensing project</h3><p>Which documents supported classification? Which node created the gap?</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="LangSmith Evaluations">
+        <div class="copy wide">
+          <p class="eyebrow">Quality checks</p>
+          <h2>Evaluations make quality repeatable</h2>
+          <pre><code>def evaluate_generated_page(output: dict) -> dict:
+    body = str(output).lower()
+    return {
+        "json_valid": isinstance(output, dict),
+        "schema_match": "title" in output and "sections" in output,
+        "mentions_location": "suburb" in body or "province" in body,
+        "no_fake_best_claim": "best" not in body,
+    }</code></pre>
+          <div class="code-followup">
+            <div><strong>Output</strong><code>{"json_valid": true, "schema_match": true, "mentions_location": true, "no_fake_best_claim": true}</code></div>
+            <div><strong>What it means</strong><span>An evaluation converts “is this good?” into repeatable checks that can be compared across runs.</span></div>
+          </div>
+          <div class="takeaway">Eval examples: JSON validity, schema match, local relevance, no fake claims, grounded citations.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Production Monitoring">
+        <div class="copy wide">
+          <p class="eyebrow">Monitoring</p>
+          <h2>LangSmith helps after deployment too</h2>
+          <div class="trace-window rich">
+            <div><strong>Failure rate</strong><span>How many generations fail parsing or schema checks?</span></div>
+            <div><strong>Retry count</strong><span>Which cases need repeated repair?</span></div>
+            <div><strong>Latency and cost</strong><span>Which provider or prompt is slow or expensive?</span></div>
+            <div><strong>Bad examples</strong><span>Which outputs should become evaluation data?</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Honest Framing">
+        <div class="copy wide">
+          <p class="eyebrow">Real-world framing</p>
+          <h2>Use real projects honestly</h2>
+          <p class="lede">These projects are strong examples of workflows LangGraph can formalize. Do not claim an existing project uses LangGraph unless it actually does.</p>
+          <div class="takeaway">LangGraph would make the workflow structured and retryable. LangSmith would make it traceable and improvable.</div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="Closing">
+        <div class="copy wide center">
+          <p class="eyebrow">Final lesson</p>
+          <h2>Reliable AI is controlled workflow</h2>
+          <p class="lede center">The best AI systems are not just smarter models. They are better workflows around the model.</p>
+          <div class="next-grid">
+            <span>Explicit state</span>
+            <span>Bounded nodes</span>
+            <span>Visible routes</span>
+            <span>Human review</span>
+            <span>Traceable runs</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="deck-ui" aria-label="Slide controls">
+      <button class="control" id="prevSlide" type="button" aria-label="Previous slide">Prev</button>
+      <button class="control" id="overviewToggle" type="button" aria-label="Show slide overview">Overview</button>
+      <span class="counter"><span id="currentSlide">1</span> / <span id="totalSlides">30</span></span>
+      <button class="control" id="nextSlide" type="button" aria-label="Next slide">Next</button>
+    </nav>
+
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+    <aside class="overview" id="overview" aria-hidden="true">
+      <div class="overview-panel">
+        <button class="overview-close" id="overviewClose" type="button">Close</button>
+        <h2>Slide Overview</h2>
+        <div class="overview-list" id="overviewList"></div>
+      </div>
+    </aside>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
