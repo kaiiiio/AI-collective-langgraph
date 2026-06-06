@@ -1,28 +1,31 @@
-﻿# Module 5: Memory Example
+# Module 5 Example: Conversation Memory
 
 ## Predict
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
+If a tutoring assistant answers a question now, what should it remember for the next turn?
 
 ## Run
 
-```bash
-./lab module 5
+```powershell
+.\lab.cmd module 5
 ```
 
 ## Observe
 
-- Each call to `add` appends one message.
-- `last(2)` returns the two most recent messages.
-- Memory is separate from one node's local variables.
-- A graph can read memory and write useful context into state.
+The memory object stores role-tagged messages:
+
+```text
+user: What is LangGraph?
+assistant: A stateful graph framework.
+```
+
+Real workflow version:
+
+```text
+consultant: defer this gap
+assistant: gap deferred with notes
+```
 
 ## Explain Back
 
-In one sentence, explain what changed and why.
+What is the difference between graph state and longer-lived memory?

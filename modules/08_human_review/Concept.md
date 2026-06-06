@@ -1,14 +1,12 @@
-﻿# Module 8: Human Review
+# Module 8: Human Review
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+Some workflows should pause before publishing, sending, refunding, deleting, or submitting anything important.
 
-```bash
-./lab module 8
-```
+AI can draft or recommend, but a human can own the final decision.
 
-Windows:
+## Run First
 
 ```powershell
 .\lab.cmd module 8
@@ -21,25 +19,20 @@ Expected output:
 {'user_message': 'Draft answer', 'approved': False, 'response': 'Paused for human feedback.'}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+The same draft has two different outcomes because approval changed.
 
 ## Name The Concept
 
-Human-in-the-loop workflows pause automation before important actions.
+Human-in-the-loop means the workflow can pause, wait for a decision, and continue only when the state allows it.
 
-## Flow
-
-```mermaid
-graph TD
-DRAFT["draft"] --> REVIEW["approved?"]
-REVIEW --> PUBLISH["publish"]
-REVIEW --> PAUSE["pause"]
+```python
+if state["approved"]:
+    return {"response": "Published"}
+return {"response": "Paused for human feedback"}
 ```
 
-## Why This Module Is Inductive
+## Check Yourself
 
-Yes. The approval gate is concrete and easy to see in the output.
+Why should an important action be blocked when approval is false?

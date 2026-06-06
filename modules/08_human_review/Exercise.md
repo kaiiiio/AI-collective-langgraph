@@ -1,25 +1,25 @@
-﻿# Module 8: Human Review Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 8 Exercises
 
 ## Beginner
 
-Change the draft text.
+Explain the difference between the approved and not-approved outputs.
 
 ## Intermediate
 
-Add reviewer feedback when `approved=False`.
+Change the rejected response to include:
+
+```text
+Reviewer notes required.
+```
 
 ## Challenge
 
-Explain what should happen before publish in a real system.
+Design a human review state for gap decisions:
 
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 8
+```python
+{
+    "gap_id": "...",
+    "decision": "accept/reject/defer",
+    "notes": "...",
+}
 ```
-
-Then answer: what did the workflow receive, and what did it return?

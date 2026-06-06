@@ -1,43 +1,42 @@
-﻿# Module 3: Conditional Edges Code Walkthrough
+# Module 3 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 3
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 3
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `modules/03_conditional_edges/main.py`.
 
-```text
-modules/03_conditional_edges/main.py
-```
-
-Then inspect:
-
-```text
-app/graphs/learning_graphs.py
-```
-
-## Key Code
+The router function returns a route name:
 
 ```python
-def route_message(message: str) -> str:
-    if "joke" in message.lower():
-return "joke"
+def choose_route(state):
+    if "joke" in state["user_message"].lower():
+        return "joke"
     return "fact"
 ```
 
-## Read It In This Order
+LangGraph maps each route name to a node.
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```text
+joke -> joke_node
+fact -> fact_node
+```
+
+## Larger Example
+
+A support ticket router could use the same structure:
+
+```python
+def route_ticket(state):
+    if "refund" in state["message"].lower():
+        return "billing"
+    if "password" in state["message"].lower():
+        return "account"
+    return "general"
+```
+
+The graph does not guess the next node. The router decides from state.

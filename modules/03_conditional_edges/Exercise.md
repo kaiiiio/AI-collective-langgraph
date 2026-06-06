@@ -1,25 +1,27 @@
-﻿# Module 3: Conditional Edges Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 3 Exercise
 
 ## Beginner
 
-Add a new input message.
+Run:
+
+```powershell
+.\lab.cmd module 3
+```
+
+Then change the input text in `main.py`. Can you make it choose the other branch?
 
 ## Intermediate
 
-Predict whether it routes to `joke`, `fact`, or `tool`.
+Design a router for a support ticket:
+
+```text
+billing -> billing_node
+login -> account_node
+bug -> engineering_node
+```
+
+Write the route names and the state field you would inspect.
 
 ## Challenge
 
-Add one more route if you want a challenge.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 3
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Add a third branch to the module, such as `quote`, `summary`, or `help`.

@@ -1,6 +1,6 @@
 # LangSmith Deep Dive
 
-LangSmith is the observability layer for the lab. It answers the questions students ask when an agent behaves strangely:
+LangSmith is the observability layer for the lab. It answers the questions you ask when an agent behaves strangely:
 
 - What ran?
 - Which node ran first?
@@ -33,23 +33,22 @@ graph TD
 
 ```text
 Node A
-  ↓
+  |
 Node B
-  ↓
+  |
 Node C
 ```
 
-LangSmith records the graph as a trace. Each node appears as an inspectable run/span. If a node calls a tool or model,
-that child operation appears underneath it.
+LangSmith records the graph as a trace. Each node appears as an inspectable run/span. If a node calls a tool or model, that child operation appears underneath it.
 
-## Screens To Explain
+## Screens To Inspect
 
 1. Project home: shows all runs for the selected project.
 2. Trace list: helps find recent executions.
 3. Trace detail: shows the hierarchy of graph, node, tool, and model calls.
 4. Inputs and outputs: shows the state passed into and returned from each node.
 5. Metrics: shows latency, token usage, and errors.
-6. Graph view: helps students connect the Mermaid diagram to the actual execution.
+6. Graph view: connects the Mermaid diagram to the actual execution.
 
 ## Setup
 

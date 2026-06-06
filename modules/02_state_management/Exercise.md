@@ -1,25 +1,35 @@
-﻿# Module 2: State Management Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 2 Exercise
 
 ## Beginner
 
-Add another field to the `before` dictionary.
+Change the input name in `modules/02_state_management/main.py` and run the module again.
+
+```powershell
+.\lab.cmd module 2
+```
+
+What changed in the final state?
 
 ## Intermediate
 
-Print only the keys that changed.
+Sketch an `OrderState` with five fields an order workflow would need.
+
+Example fields:
+
+```text
+order_id
+amount
+tax
+discount
+invoice
+```
 
 ## Challenge
 
-Explain which part of the state came from the user and which came from the node.
+Add one new field to the module state, such as `language` or `request_id`, and make the node return it.
 
-## Check Yourself
+Then answer:
 
-After each change, rerun:
-
-```bash
-./lab module 2
+```text
+Did the old fields disappear?
 ```
-
-Then answer: what did the workflow receive, and what did it return?

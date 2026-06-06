@@ -1,28 +1,36 @@
-﻿# Module 10: Capstone Project Example
+# Module 10 Example
 
-## Predict
+Input:
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
-
-## Run
-
-```bash
-./lab capstone
+```python
+{
+    "question": "Why use LangGraph?",
+    "documents": ["LangGraph makes stateful workflows explicit."],
+}
 ```
 
-## Observe
+Research node adds:
 
-- `question` and `documents` start the workflow.
-- The research step writes `summary`.
-- The writer step writes `draft`.
-- The reviewer step writes `review` and `approved`.
+```python
+{"summary": "..."}
+```
 
-## Explain Back
+Writer node adds:
 
-In one sentence, explain what changed and why.
+```python
+{"draft": "..."}
+```
+
+Reviewer node adds:
+
+```python
+{"review": "...", "approved": True}
+```
+
+This is a compact version of a larger workflow:
+
+```text
+input, evidence, specialist roles, review, final output
+```
+
+The capstone is not a new idea. It is modules 1 through 9 composed together.

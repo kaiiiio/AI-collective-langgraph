@@ -1,43 +1,46 @@
-﻿# Module 10: Capstone Project Code Walkthrough
+# Module 10 Code Walkthrough
 
 ## Run
-
-```bash
-./lab capstone
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd capstone
 ```
 
-## Inspect
+## Read
 
-Start with:
-
-```text
-modules/10_capstone_project/main.py
-```
-
-Then inspect:
-
-```text
-app/graphs/learning_graphs.py
-```
-
-## Key Code
+Open `app/graphs/learning_graphs.py`:
 
 ```python
-state = ResearchState(question=question, documents=documents)
-state = research_agent(state)
-state = writer_agent(state)
-return reviewer_agent(state)
+def run_research_assistant(question: str, documents: list[str]):
+    state = ResearchState(question=question, documents=documents)
+    state = research_agent(state)
+    state = writer_agent(state)
+    return reviewer_agent(state)
 ```
 
-## Read It In This Order
+Then open `app/state/schemas.py`:
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```python
+class ResearchState(BaseModel):
+    question: str
+    documents: list[str]
+    summary: str = ""
+    draft: str = ""
+    review: str = ""
+    approved: bool = False
+```
+
+## Workflow Translation
+
+The same architecture can scale to many domains:
+
+```text
+input
+  -> gather evidence
+  -> specialist role
+  -> draft output
+  -> review
+  -> final response
+```
+
+The capstone is small on purpose so you can see every state field and every role.

@@ -1,14 +1,20 @@
-﻿# Module 9: LangSmith
+# Module 9: LangSmith
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+Suppose a question-answering workflow gives a weak answer. You need to know:
 
-```bash
-./lab module 9
+```text
+Which node ran?
+What state entered that node?
+What did the node return?
+Which tool or model call happened inside it?
+Where did the answer first become wrong?
 ```
 
-Windows:
+Logs are not enough. You need traces.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 9
@@ -17,29 +23,36 @@ Windows:
 Expected output:
 
 ```text
-{'tracing': False, 'project': 'langgraph-learning-lab'}
+{'tracing': True, 'project': 'langgraph-learning-lab'}
 {'user_message': 'LangSmith learner', 'response': 'Hello, LangSmith learner. Welcome to LangGraph.'}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+LangSmith is the observability layer.
+
+It can show:
+
+- the full graph run
+- node inputs
+- node outputs
+- tool calls
+- model calls
+- errors
+- latency and token usage
 
 ## Name The Concept
 
-LangSmith shows what happened inside an AI workflow run.
+LangGraph runs the workflow. LangSmith shows what happened inside it.
 
-## Flow
+```python
+from langsmith import traceable
 
-```mermaid
-graph TD
-GRAPH["graph run"] --> TRACE["trace"]
-TRACE --> NODE["node spans"]
-TRACE --> METRICS["latency, errors, tokens"]
+@traceable(name="Generate answer")
+def generate_answer(question, evidence):
+    ...
 ```
 
-## Why This Module Is Inductive
+## Check Yourself
 
-Partly. Students can run the module, but traces and spans need a short instructor explanation.
+Where would you look to prove which node made the wrong decision?

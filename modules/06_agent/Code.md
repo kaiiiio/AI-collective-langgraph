@@ -1,43 +1,34 @@
-﻿# Module 6: ReAct Agent Code Walkthrough
+# Module 6 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 6
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 6
 ```
 
-## Inspect
+## Read
 
-Start with:
-
-```text
-modules/06_agent/main.py
-```
-
-Then inspect:
-
-```text
-app/graphs/learning_graphs.py
-```
-
-## Key Code
+Find `tool_selection_graph` in `app/graphs/learning_graphs.py`:
 
 ```python
 def tool_selection_graph(message: str):
-    if "solve" in message:
-tool = equation_solver_tool
-    return {"tool_name": tool_name, "response": result}
+    lowered = message.lower()
+    if "source" in lowered or "triage" in lowered:
+        result = source_triage_tool(...)
+        tool = "source_triage_tool"
+    elif "analyze" in lowered or "text" in lowered:
+        result = text_analyzer_tool(...)
+        tool = "text_analyzer_tool"
+    else:
+        result = equation_solver_tool(...)
+        tool = "equation_solver_tool"
+    return {"tool_name": tool, "tool_result": result, "response": result}
 ```
 
-## Read It In This Order
+## Real Workflow Translation
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```text
+case needs evidence check -> source triage tool
+case needs policy check -> policy section checker
+case needs package check -> submission validator
+```

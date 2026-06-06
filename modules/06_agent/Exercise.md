@@ -1,25 +1,26 @@
-﻿# Module 6: ReAct Agent Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 6 Exercise
 
 ## Beginner
 
-Add a new message that selects an existing tool.
+Run:
+
+```powershell
+.\lab.cmd module 6
+```
+
+Identify the selected `tool_name` for each input.
 
 ## Intermediate
 
-Add a new tool branch.
+Design an agent decision table for a support assistant:
+
+| User asks for | Tool or action |
+|---|---|
+| exact calculation | calculator |
+| text quality | text analyzer |
+| source trust | source triage |
+| general question | direct answer |
 
 ## Challenge
 
-Explain why tool choice belongs in workflow logic, not in random print statements.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 6
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Add one more decision case to the agent, such as `summarize`, `translate`, or `validate`.

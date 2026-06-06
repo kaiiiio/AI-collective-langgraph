@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/docs/instructor/slides/index.html"
+      "destination": "/docs/slides/index.html"
     }
   ]
 }

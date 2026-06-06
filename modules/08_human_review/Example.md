@@ -1,28 +1,33 @@
-﻿# Module 8: Human Review Example
+# Module 8 Example: Approval Gate
 
 ## Predict
 
-Before running the module, predict the final state.
+What should happen when `approved` is `True`?
 
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
+What should happen when `approved` is `False`?
 
 ## Run
 
-```bash
-./lab module 8
+```powershell
+.\lab.cmd module 8
 ```
 
 ## Observe
 
-- `approved=True` publishes the draft.
-- `approved=False` pauses the workflow.
-- The decision is explicit in state.
-- This pattern is useful for risky or high-impact outputs.
+The same draft has different outcomes:
+
+```text
+approved -> publish
+not approved -> pause
+```
+
+Real workflow version:
+
+```text
+open high-risk gaps -> consultant review
+resolved gaps -> export submission package
+```
 
 ## Explain Back
 
-In one sentence, explain what changed and why.
+Why is a human review node important in regulated AI systems?

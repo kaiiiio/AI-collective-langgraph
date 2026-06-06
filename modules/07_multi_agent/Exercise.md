@@ -1,25 +1,28 @@
-﻿# Module 7: Multi-Agent Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 7 Exercise
 
 ## Beginner
 
-Make the reviewer reject drafts that are too short.
+Run:
+
+```powershell
+.\lab.cmd module 7
+```
+
+List which role produced `summary`, `draft`, `review`, and `approved`.
 
 ## Intermediate
 
-Add a `confidence` field to the state.
+Design a four-role document workflow:
+
+```text
+researcher
+drafter
+editor
+reviewer
+```
+
+Write the state field each role should produce.
 
 ## Challenge
 
-Explain which role should write each field.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 7
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Add an editor role between writer and reviewer. What should it read, and what should it return?

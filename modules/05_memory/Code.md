@@ -1,42 +1,37 @@
-﻿# Module 5: Memory Code Walkthrough
+# Module 5 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 5
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 5
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `modules/05_memory/main.py`.
 
-```text
-modules/05_memory/main.py
-```
-
-Then inspect:
-
-```text
-app/services/memory.py
-```
-
-## Key Code
+The memory object stores entries:
 
 ```python
 memory.add("user", "What is LangGraph?")
 memory.add("assistant", "A stateful graph framework.")
-print(memory.last(2))
 ```
 
-## Read It In This Order
+Then it can return recent history:
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```python
+memory.last(4)
+```
+
+## Larger Example
+
+For a study assistant, memory-like data could include:
+
+```text
+last question
+previous answer
+topics already explained
+examples the learner understood
+```
+
+The module keeps the implementation small so the pattern is visible.

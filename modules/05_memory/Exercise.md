@@ -1,25 +1,27 @@
-﻿# Module 5: Memory Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 5 Exercise
 
 ## Beginner
 
-Add a third message.
+Add one more memory entry and run:
+
+```powershell
+.\lab.cmd module 5
+```
+
+Did the new entry appear in the history?
 
 ## Intermediate
 
-Call `last(1)` and `last(3)`.
+Write three memory entries for a study assistant:
+
+```text
+user: ...
+assistant: ...
+user: ...
+```
+
+Then decide which entries should be kept if the history is limited to the last two messages.
 
 ## Challenge
 
-Clear the memory and explain what changed.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 5
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Add a summary field that stores the most important thing from the conversation so far.

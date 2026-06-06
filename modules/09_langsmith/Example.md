@@ -1,28 +1,29 @@
-﻿# Module 9: LangSmith Example
+# Module 9 Example
 
-## Predict
+Without tracing, you might only see:
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
-
-## Run
-
-```bash
-./lab module 9
+```text
+Final answer was weak.
 ```
 
-## Observe
+With LangSmith, you can inspect:
 
-- The module prints whether tracing is enabled.
-- The graph still runs when tracing is disabled.
-- With credentials, LangSmith can show traces for graph runs.
-- Observability helps debug state transitions.
+```text
+graph run
+  node input
+  node output
+  tool call
+  model call
+  error or latency
+```
 
-## Explain Back
+Useful debugging questions:
 
-In one sentence, explain what changed and why.
+```text
+Which node changed the answer?
+Which input was missing?
+Which tool returned surprising data?
+Which model call was slow?
+```
+
+The trace turns a vague failure into a specific place to inspect.

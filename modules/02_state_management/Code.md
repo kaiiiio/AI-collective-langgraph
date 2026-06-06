@@ -1,41 +1,36 @@
-﻿# Module 2: State Management Code Walkthrough
+# Module 2 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 2
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 2
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `modules/02_state_management/main.py`.
 
-```text
-modules/02_state_management/main.py
-```
-
-Then inspect:
-
-```text
-modules/02_state_management/main.py
-```
-
-## Key Code
+The state type describes the fields the graph may carry:
 
 ```python
-before = {"user_message": "Ada"}
-after = hello_graph(before["user_message"])
+class AgentState(TypedDict, total=False):
+    user_message: str
+    response: str
 ```
 
-## Read It In This Order
+`total=False` means every field is optional. A field can appear later after a node returns it.
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+## Larger Example
+
+The same idea works for an order flow:
+
+```python
+class OrderState(TypedDict, total=False):
+    order_id: str
+    amount: float
+    tax: float
+    final_amount: float
+    invoice: str
+```
+
+State lets every node work with one shared object instead of passing many separate variables around.

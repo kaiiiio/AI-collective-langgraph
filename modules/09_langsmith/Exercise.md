@@ -1,25 +1,25 @@
-﻿# Module 9: LangSmith Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 9 Exercise
 
 ## Beginner
 
-Create `.env` from `.env.example`.
+Run:
+
+```powershell
+.\lab.cmd module 9
+```
+
+Confirm the project name printed in the output.
 
 ## Intermediate
 
-Enable tracing if you have a LangSmith key.
+Write three questions LangSmith should answer for a QA workflow:
+
+```text
+Which documents were retrieved?
+Which node generated the answer?
+Which output changed after review?
+```
 
 ## Challenge
 
-Run another module and inspect the trace.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 9
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Run the same module twice with different input text and compare the traces.

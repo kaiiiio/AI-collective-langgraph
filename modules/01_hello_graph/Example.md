@@ -1,28 +1,29 @@
-﻿# Module 1: Hello Graph Example
+# Module 1 Example: One Step Workflow
 
 ## Predict
 
-Before running the module, predict the final state.
+Before running, predict the final state:
 
-Ask:
+```python
+{"user_message": "student"}
+```
 
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
+What new field should appear after the graph runs?
 
 ## Run
 
-```bash
-./lab module 1
+```powershell
+.\lab.cmd module 1
 ```
 
 ## Observe
 
-- The input state contains `user_message`.
-- `hello_node` reads that value.
-- The node returns a new `response` key.
-- The final state contains both the original input and the node output.
+The node reads `user_message` and returns `response`.
+
+```text
+START -> hello_node -> END
+```
 
 ## Explain Back
 
-In one sentence, explain what changed and why.
+In one sentence: a graph node receives state and returns a state update.

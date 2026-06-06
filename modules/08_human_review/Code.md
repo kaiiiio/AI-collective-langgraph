@@ -1,41 +1,28 @@
-﻿# Module 8: Human Review Code Walkthrough
+# Module 8 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 8
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 8
 ```
 
-## Inspect
+## Read
 
-Start with:
-
-```text
-modules/08_human_review/main.py
-```
-
-Then inspect:
-
-```text
-app/graphs/learning_graphs.py
-```
-
-## Key Code
+Find `human_review_graph` in `app/graphs/learning_graphs.py`:
 
 ```python
 def human_review_graph(draft: str, approved: bool):
     response = f"Published: {draft}" if approved else "Paused for human feedback."
+    return {"user_message": draft, "approved": approved, "response": response}
 ```
 
-## Read It In This Order
+## Real Workflow Translation
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```python
+def route_after_gap_review(state):
+    if state["review_complete"] and not state["open_gaps"]:
+        return "export_submission"
+    return "remediation"
+```
+
+Human approval is a routing input.

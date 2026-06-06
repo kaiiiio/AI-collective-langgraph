@@ -1,14 +1,20 @@
-﻿# Module 7: Multi-Agent
+# Module 7: Multi-Agent Roles
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+A serious AI workflow should not be one giant step doing everything.
 
-```bash
-./lab module 7
-```
+For a question-answering assistant, separate roles might handle:
 
-Windows:
+- research
+- summarizing
+- drafting
+- reviewing
+- approval
+
+Each role should have a bounded task and a visible output.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 7
@@ -20,26 +26,26 @@ Expected output:
 {'question': 'What is LangGraph?', 'documents': ['LangGraph is a stateful graph framework.'], 'summary': ..., 'draft': ..., 'review': ..., 'approved': True}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+Different fields come from different roles:
+
+| Role | Field It Produces |
+|---|---|
+| Researcher | `summary` |
+| Writer | `draft` |
+| Reviewer | `review`, `approved` |
 
 ## Name The Concept
 
-A multi-agent workflow splits work into named roles with clear handoffs.
+Multi-agent can mean role-based graph nodes.
 
-## Flow
-
-```mermaid
-graph TD
-QUESTION["question + documents"] --> RESEARCH["research_agent"]
-RESEARCH --> WRITER["writer_agent"]
-WRITER --> REVIEWER["reviewer_agent"]
-REVIEWER --> FINAL["approved state"]
+```text
+researcher -> writer -> reviewer
 ```
 
-## Why This Module Is Inductive
+This is easier to debug than one giant prompt because each role has a clear contract.
 
-Partly. Students can observe the role handoffs, then the instructor should explain why role boundaries matter.
+## Check Yourself
+
+Which role wrote each field in the final state?

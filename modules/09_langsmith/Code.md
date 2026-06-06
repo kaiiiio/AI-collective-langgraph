@@ -1,42 +1,33 @@
-﻿# Module 9: LangSmith Code Walkthrough
+# Module 9 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 9
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 9
 ```
 
-## Inspect
+## Read
 
-Start with:
-
-```text
-modules/09_langsmith/main.py
-```
-
-Then inspect:
-
-```text
-app/config/settings.py
-```
-
-## Key Code
+Open `modules/09_langsmith/main.py`:
 
 ```python
-LANGSMITH_TRACING=true
-LANGSMITH_API_KEY=your_key
-LANGSMITH_PROJECT=langgraph-learning-lab
+settings = Settings()
+print({"tracing": settings.langsmith_tracing, "project": settings.langsmith_project})
+print(hello_graph("LangSmith learner"))
 ```
 
-## Read It In This Order
+Open `app/config/settings.py`:
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+```python
+langsmith_tracing: bool = Field(default=False, alias="LANGSMITH_TRACING")
+langsmith_api_key: str | None = Field(default=None, alias="LANGSMITH_API_KEY")
+langsmith_project: str = Field(default="langgraph-learning-lab", alias="LANGSMITH_PROJECT")
+```
+
+## Real Workflow Translation
+
+```text
+.env -> docker compose -> container environment -> Settings -> LangSmith trace
+```
+
+For regulated workflows, traces help prove why a decision was made.

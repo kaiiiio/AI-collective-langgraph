@@ -1,14 +1,20 @@
-﻿# Module 3: Conditional Edges
+# Module 3: Conditional Edges
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+A workflow should not always move in a straight line.
 
-```bash
-./lab module 3
+For a support ticket:
+
+```text
+if billing issue -> billing node
+if login issue -> account node
+if bug report -> engineering node
 ```
 
-Windows:
+That is conditional routing.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 3
@@ -17,31 +23,30 @@ Windows:
 Expected output:
 
 ```text
-{'user_message': 'Tell me a joke', 'response': 'A graph node walked into a bar and found the shortest path.', 'route': 'joke'}
-{'user_message': 'Tell me a fact', 'response': 'Fact: LangGraph represents workflows as stateful graphs.', 'route': 'fact'}
+{'user_message': 'Tell me a joke', 'route': 'joke', 'response': 'A graph node walked into a bar and found the shortest path.'}
+{'user_message': 'Tell me a fact', 'route': 'fact', 'response': 'Fact: LangGraph represents workflows as stateful graphs.'}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+The input changes the route:
+
+| Input | Route | Result |
+|---|---|---|
+| `Tell me a joke` | `joke` | joke response |
+| `Tell me a fact` | `fact` | fact response |
 
 ## Name The Concept
 
-Conditional edges choose the next node by inspecting state.
+A conditional edge reads state and chooses the next node.
 
-## Flow
-
-```mermaid
-graph TD
-START["START"] --> ROUTER["route_state"]
-ROUTER --> JOKE["joke_node"]
-ROUTER --> FACT["fact_node"]
-JOKE --> END["END"]
-FACT --> END
+```python
+def route_ticket(state):
+    if "billing" in state["message"]:
+        return "billing_node"
+    return "general_node"
 ```
 
-## Why This Module Is Inductive
+## Check Yourself
 
-Yes. Ask students to predict the route, run the module, then compare prediction with output.
+What value in the input caused the graph to choose a different branch?

@@ -1,28 +1,44 @@
-﻿# Module 3: Conditional Edges Example
+# Module 3 Example
 
-## Predict
+Input 1:
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
-
-## Run
-
-```bash
-./lab module 3
+```python
+{"user_message": "Tell me a joke"}
 ```
 
-## Observe
+Route:
 
-- A joke request routes to `joke_node`.
-- A fact request routes to `fact_node`.
-- The final state includes the route that was chosen.
-- The graph path depends on the input state.
+```text
+joke
+```
 
-## Explain Back
+Input 2:
 
-In one sentence, explain what changed and why.
+```python
+{"user_message": "Tell me a fact"}
+```
+
+Route:
+
+```text
+fact
+```
+
+This is the graph version of an `if` statement.
+
+```text
+if state says joke -> joke node
+else -> fact node
+```
+
+## Try This Mentally
+
+For a support ticket:
+
+```text
+refund request -> billing node
+password reset -> account node
+app crashed -> engineering node
+```
+
+What state field would you use to choose the route?

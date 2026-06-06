@@ -1,14 +1,20 @@
-﻿# Module 2: State Management
+# Module 2: State Management
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+An order flow needs to keep related data together:
 
-```bash
-./lab module 2
+```text
+order_id
+amount
+tax
+final_amount
+invoice
 ```
 
-Windows:
+That shared object is the graph state.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 2
@@ -21,24 +27,38 @@ Before: {'user_message': 'Ada'}
 After: {'user_message': 'Ada', 'response': 'Hello, Ada. Welcome to LangGraph.'}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+The original field stayed:
+
+```python
+"user_message": "Ada"
+```
+
+A new field appeared:
+
+```python
+"response": "Hello, Ada. Welcome to LangGraph."
+```
 
 ## Name The Concept
 
-State is the shared data object that moves through the graph.
+State is the structured data that moves through a graph run.
 
-## Flow
+For an order workflow, state might look like:
 
-```mermaid
-graph TD
-BEFORE["Before state"] --> NODE["hello_node"]
-NODE --> AFTER["After state"]
+```python
+{
+    "order_id": "ORD-1001",
+    "amount": 500.0,
+    "tax": None,
+    "final_amount": None,
+    "invoice": None,
+}
 ```
 
-## Why This Module Is Inductive
+Each node should read the fields it needs and return only the fields it changed.
 
-Yes. Students can infer state by seeing what changed between `Before` and `After`.
+## Check Yourself
+
+Which key existed before the node, and which key appeared after the node?

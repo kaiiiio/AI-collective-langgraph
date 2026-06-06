@@ -1,28 +1,30 @@
-﻿# Module 6: ReAct Agent Example
+# Module 6 Example: Decide, Act, Observe
 
 ## Predict
 
-Before running the module, predict the final state.
+Which tool should each request choose?
 
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
+| Request | Tool |
+|---|---|
+| `solve an equation` | ? |
+| `analyze this text` | ? |
+| `triage this source` | ? |
 
 ## Run
 
-```bash
-./lab module 6
+```powershell
+.\lab.cmd module 6
 ```
 
 ## Observe
 
-- Different messages choose different tools.
-- The selected tool name is written into state.
-- The tool result becomes the response.
-- This is agent-like because the next action depends on intent.
+The output shows:
+
+- `user_message`: goal
+- `tool_name`: action
+- `tool_result`: observation
+- `response`: answer
 
 ## Explain Back
 
-In one sentence, explain what changed and why.
+Why is this easier to debug than one hidden agent prompt?

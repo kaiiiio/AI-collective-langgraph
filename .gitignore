@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Generated presentation and QA artifacts
+outputs/
+desktop-contact-sheet.png
+docs/slides/*-preview.png
+docs/slides/screenshots/
+docs/slides/qa/
+docs/slides
+# Local editor and OS noise
+.DS_Store
+Thumbs.db

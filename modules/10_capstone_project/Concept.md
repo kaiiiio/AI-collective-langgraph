@@ -1,14 +1,16 @@
-﻿# Module 10: Capstone Project
+# Module 10: Capstone Project
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+The capstone is a compact version of a complete AI workflow.
 
-```bash
-./lab capstone
+The example is a research assistant:
+
+```text
+question -> evidence -> specialist roles -> review -> final output
 ```
 
-Windows:
+## Run First
 
 ```powershell
 .\lab.cmd capstone
@@ -20,26 +22,32 @@ Expected output:
 {'question': 'Why use LangGraph?', 'documents': [...], 'summary': ..., 'draft': ..., 'review': ..., 'approved': True}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+Every output field connects to a previous concept:
+
+| Field | Concept |
+|---|---|
+| `question` | initial state |
+| `documents` | input evidence |
+| `summary` | research node |
+| `draft` | writer node |
+| `review` | reviewer node |
+| `approved` | review decision |
 
 ## Name The Concept
 
-The capstone combines state, roles, review, and final output into one research-assistant workflow.
+Composition means building a larger workflow from smaller understandable parts.
 
-## Flow
+Production-style AI systems stay debuggable when they have:
 
-```mermaid
-graph TD
-QUESTION["question"] --> RESEARCH["research"]
-RESEARCH --> WRITER["writer"]
-WRITER --> REVIEWER["reviewer"]
-REVIEWER --> ANSWER["approved answer"]
-```
+1. explicit state
+2. small nodes
+3. visible routes
+4. reliable tools
+5. human approval gates
+6. LangSmith traces
 
-## Why This Module Is Inductive
+## Check Yourself
 
-Partly. Students can recognize earlier pieces, then the instructor should explain how composition creates a larger workflow.
+Which earlier module explains each field in the capstone state?

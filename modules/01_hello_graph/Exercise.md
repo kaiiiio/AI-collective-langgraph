@@ -1,25 +1,19 @@
-﻿# Module 1: Hello Graph Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 1 Exercises
 
 ## Beginner
 
-Change the input name from `student` to your own name.
+Change the input name in `modules/01_hello_graph/main.py`. Predict the new response before running.
 
 ## Intermediate
 
-Add one more returned field, such as `module`.
+Change `hello_node` so it also returns:
+
+```python
+{"module": "hello_graph"}
+```
+
+Then ask: what changed in state?
 
 ## Challenge
 
-Draw the graph before running the code again.
-
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 1
-```
-
-Then answer: what did the workflow receive, and what did it return?
+Rename the node from `hello` to `intake_start` and explain why node names should describe the job they perform.

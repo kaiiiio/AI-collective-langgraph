@@ -1,28 +1,42 @@
-﻿# Module 7: Multi-Agent Example
+# Module 7 Example
 
-## Predict
+Question:
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
-
-## Run
-
-```bash
-./lab module 7
+```text
+What is LangGraph?
 ```
 
-## Observe
+Researcher output:
 
-- The research role writes `summary`.
-- The writer role writes `draft`.
-- The reviewer role writes `review` and `approved`.
-- Each role changes a different part of the same state.
+```text
+summary
+```
 
-## Explain Back
+Writer output:
 
-In one sentence, explain what changed and why.
+```text
+draft
+```
+
+Reviewer output:
+
+```text
+review
+approved
+```
+
+The graph is:
+
+```text
+research_agent -> writer_agent -> reviewer_agent
+```
+
+## Try This Mentally
+
+For a document workflow:
+
+```text
+researcher -> drafter -> editor -> reviewer
+```
+
+What state field should each role produce?

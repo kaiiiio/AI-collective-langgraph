@@ -1,25 +1,22 @@
-﻿# Module 4: Tools Exercises
-
-Do these after you can explain the module output without looking at the notes.
+# Module 4 Exercises
 
 ## Beginner
 
-Change the equation and rerun the module.
+Run the module and identify which output came from which tool.
 
 ## Intermediate
 
-Pass a longer paragraph to the text analyzer.
+Change the sample text analyzed by `text_analyzer_tool`. Predict which keyword will appear.
 
 ## Challenge
 
-Try a weak source description and compare the triage result.
+Design a tool called `policy_section_checker` that checks for:
 
-## Check Yourself
-
-After each change, rerun:
-
-```bash
-./lab module 4
+```text
+governance
+monitoring
+recordkeeping
+escalation
 ```
 
-Then answer: what did the workflow receive, and what did it return?
+Explain why this should be a tool instead of a model guess.

@@ -1,14 +1,16 @@
-﻿# Module 1: Hello Graph
+# Module 1: Hello Graph
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+Start with the smallest possible workflow:
 
-```bash
-./lab module 1
+```text
+input state -> one node -> output state
 ```
 
-Windows:
+Imagine a tiny onboarding flow. A name enters the system, and the workflow adds one greeting.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 1
@@ -20,24 +22,35 @@ Expected output:
 {'user_message': 'student', 'response': 'Hello, student. Welcome to LangGraph.'}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+Before the node runs, the state has:
+
+```python
+{"user_message": "student"}
+```
+
+After the node runs, the state also has:
+
+```python
+{"response": "Hello, student. Welcome to LangGraph."}
+```
 
 ## Name The Concept
 
-A graph is a workflow made from state, nodes, and edges.
+A LangGraph workflow can be as small as:
 
-## Flow
-
-```mermaid
-graph TD
-START["START"] --> HELLO["hello_node"]
-HELLO --> END["END"]
+```text
+START -> node -> END
 ```
 
-## Why This Module Is Inductive
+The node is just a function:
 
-Yes. Students can discover the rule by comparing the input and final state.
+```python
+def hello_node(state):
+    return {"response": "Hello, student. Welcome to LangGraph."}
+```
+
+## Check Yourself
+
+What did the node receive, and what did it return?

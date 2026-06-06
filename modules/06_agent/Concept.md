@@ -1,14 +1,17 @@
-﻿# Module 6: ReAct Agent
+# Module 6: Agent Loop
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+An AI workflow often needs to decide what action comes next.
 
-```bash
-./lab module 6
-```
+For a support assistant:
 
-Windows:
+- if the request asks for exact math, call a calculator tool
+- if the request asks about text, call a text analyzer
+- if the request asks about a source, call a source triage tool
+- after the tool returns, write the response
+
+## Run First
 
 ```powershell
 .\lab.cmd module 6
@@ -22,25 +25,25 @@ Expected output:
 {'user_message': 'triage this source', 'tool_name': 'source_triage_tool', ...}
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+Different requests choose different tools.
+
+That is the agent loop in a small form:
+
+```text
+decide -> act -> observe -> answer
+```
 
 ## Name The Concept
 
-An agent-style workflow chooses an action, observes the result, and returns an answer.
+An agent is not magic. It is a workflow that uses current state to choose an action.
 
-## Flow
-
-```mermaid
-graph TD
-MESSAGE["user_message"] --> SELECT["select tool"]
-SELECT --> TOOL["tool call"]
-TOOL --> ANSWER["response"]
+```python
+if "triage" in state["user_message"]:
+    tool_name = "source_triage_tool"
 ```
 
-## Why This Module Is Inductive
+## Check Yourself
 
-Partly. The output is observable, but the instructor should explain the reason-act-observe pattern.
+Where do you see the decision, the action, and the observation in the output?

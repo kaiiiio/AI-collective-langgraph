@@ -1,41 +1,37 @@
-﻿# Module 4: Tools Code Walkthrough
+# Module 4 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 4
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 4
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `app/tools/basic_tools.py`.
 
-```text
-modules/04_tools/main.py
-```
-
-Then inspect:
-
-```text
-app/tools/basic_tools.py
-```
-
-## Key Code
+Focus on tool shape:
 
 ```python
-def equation_solver_tool(equation: str) -> str:
-    return "x = 4"
+def text_analyzer_tool(text: str) -> str:
+    words = ...
+    return f"words={len(words)}; ..."
 ```
 
-## Read It In This Order
+Tools should be:
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+- clear
+- testable
+- deterministic when possible
+- safe to call from a graph node
+
+## Real Workflow Translation
+
+```python
+def policy_section_checker(policy_text: str) -> dict:
+    return {
+        "has_governance": "governance" in policy_text.lower(),
+        "has_monitoring": "monitoring" in policy_text.lower(),
+        "has_recordkeeping": "record" in policy_text.lower(),
+    }
+```

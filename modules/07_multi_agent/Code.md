@@ -1,32 +1,16 @@
-﻿# Module 7: Multi-Agent Code Walkthrough
+# Module 7 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 7
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 7
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `modules/07_multi_agent/main.py`.
 
-```text
-modules/07_multi_agent/main.py
-```
-
-Then inspect:
-
-```text
-app/agents/research_team.py
-```
-
-## Key Code
+The workflow calls role-specific functions:
 
 ```python
 state = research_agent(state)
@@ -34,9 +18,14 @@ state = writer_agent(state)
 state = reviewer_agent(state)
 ```
 
-## Read It In This Order
+Each role reads the shared state and returns a focused update.
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+## Larger Example
+
+A document workflow could use the same role pattern:
+
+```text
+researcher -> drafter -> editor -> reviewer -> publisher
+```
+
+The important idea is not the role names. The important idea is that each role has one job and one visible output.

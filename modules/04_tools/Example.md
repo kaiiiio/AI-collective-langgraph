@@ -1,28 +1,34 @@
-﻿# Module 4: Tools Example
+# Module 4 Example: Reliable Tool Results
 
 ## Predict
 
-Before running the module, predict the final state.
+Which tasks should use deterministic code instead of model guessing?
 
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
+- solve an equation
+- count words and keywords
+- check if a source looks useful
 
 ## Run
 
-```bash
-./lab module 4
+```powershell
+.\lab.cmd module 4
 ```
 
 ## Observe
 
-- The equation tool returns an exact answer.
-- The text analyzer returns measurable writing facts.
-- The source triage tool labels a source using rules.
-- No model call is required for these reliable actions.
+Each tool has:
+
+```text
+input -> reliable function -> output
+```
+
+Real workflow version:
+
+```text
+policy text -> section checker -> missing sections
+mapping rationale -> citation checker -> needs review?
+```
 
 ## Explain Back
 
-In one sentence, explain what changed and why.
+Why should rule citation checks be tools or validators rather than free-form model text?

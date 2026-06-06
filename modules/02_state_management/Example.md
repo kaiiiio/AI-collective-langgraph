@@ -1,28 +1,50 @@
-﻿# Module 2: State Management Example
+# Module 2 Example
 
-## Predict
+Start state:
 
-Before running the module, predict the final state.
-
-Ask:
-
-- What is the starting input?
-- Which step runs first?
-- What new key or value should appear?
-
-## Run
-
-```bash
-./lab module 2
+```python
+{"user_message": "Ada"}
 ```
 
-## Observe
+Node return value:
 
-- `Before` shows the state before graph execution.
-- `After` shows the state after node execution.
-- The graph does not erase `user_message`.
-- The node adds `response` to the state.
+```python
+{"response": "Hello, Ada. Welcome to LangGraph."}
+```
 
-## Explain Back
+Final state:
 
-In one sentence, explain what changed and why.
+```python
+{
+    "user_message": "Ada",
+    "response": "Hello, Ada. Welcome to LangGraph.",
+}
+```
+
+The pattern to look for in every module:
+
+```text
+state before node
+node returns a partial update
+LangGraph merges the update into state
+```
+
+## Try This Mentally
+
+If an order starts as:
+
+```python
+{"order_id": "ORD-1", "amount": 100}
+```
+
+and a tax node returns:
+
+```python
+{"tax": 18}
+```
+
+the merged state is:
+
+```python
+{"order_id": "ORD-1", "amount": 100, "tax": 18}
+```

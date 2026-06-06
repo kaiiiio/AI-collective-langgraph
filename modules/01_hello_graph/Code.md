@@ -1,32 +1,16 @@
-﻿# Module 1: Hello Graph Code Walkthrough
+# Module 1 Code Walkthrough
 
 ## Run
-
-```bash
-./lab module 1
-```
-
-Windows:
 
 ```powershell
 .\lab.cmd module 1
 ```
 
-## Inspect
+## Read
 
-Start with:
+Open `modules/01_hello_graph/main.py`.
 
-```text
-modules/01_hello_graph/main.py
-```
-
-Then inspect:
-
-```text
-app/graphs/learning_graphs.py
-```
-
-## Key Code
+The important shape is:
 
 ```python
 def hello_node(state):
@@ -34,9 +18,12 @@ def hello_node(state):
     return {"response": f"Hello, {name}. Welcome to LangGraph."}
 ```
 
-## Read It In This Order
+The node reads one field and returns one new field.
 
-1. Find the input value.
-2. Find the function that receives it.
-3. Find the returned state fields.
-4. Compare the returned fields with the module output.
+## Graph Shape
+
+```text
+START -> hello_node -> END
+```
+
+This module is intentionally tiny. If you understand the input state, the node return value, and the final merged state, you understand the base pattern for every later module.

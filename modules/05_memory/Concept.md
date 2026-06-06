@@ -1,14 +1,20 @@
-﻿# Module 5: Memory
+# Module 5: Memory
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+A conversation usually does not finish in one message.
 
-```bash
-./lab module 5
+Someone may ask a question, receive an answer, and then ask a follow-up:
+
+```text
+What is LangGraph?
+Can you give me a smaller example?
+How does state change after each node?
 ```
 
-Windows:
+The workflow needs useful context from earlier turns.
+
+## Run First
 
 ```powershell
 .\lab.cmd module 5
@@ -20,25 +26,24 @@ Expected output:
 ['user: What is LangGraph?', 'assistant: A stateful graph framework.']
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+The memory stores prior messages so the next step can use them.
+
+State is the data for one graph run. Memory is context that can survive beyond one immediate step.
 
 ## Name The Concept
 
-Memory stores context across turns so later steps can use earlier messages.
+Memory lets a workflow carry useful history:
 
-## Flow
-
-```mermaid
-graph TD
-TURN1["user message"] --> MEMORY["ConversationMemory"]
-TURN2["assistant message"] --> MEMORY
-MEMORY --> LAST["last messages"]
+```python
+memory.add("user", "What is LangGraph?")
+memory.add("assistant", "A stateful graph framework.")
+history = memory.last(4)
 ```
 
-## Why This Module Is Inductive
+In larger systems, memory may be backed by a database, checkpoint store, or conversation history service.
 
-Yes. The stored message list makes memory visible immediately.
+## Check Yourself
+
+What would the assistant lose if it had no memory?

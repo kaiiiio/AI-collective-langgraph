@@ -1,14 +1,18 @@
-﻿# Module 4: Tools
+# Module 4: Tools
 
-## Start With Observation
+## Real Scenario
 
-Run the module first:
+A model should not guess work that normal software can do exactly.
 
-```bash
-./lab module 4
-```
+Use tools for reliable tasks:
 
-Windows:
+- calculate values
+- count words
+- check a URL or source label
+- validate required fields
+- format output
+
+## Run First
 
 ```powershell
 .\lab.cmd module 4
@@ -22,25 +26,29 @@ words=8; sentences=2; reading_time=1 min; keywords=langgraph, keeps, state
 high-priority: primary-source signal, freshness signal
 ```
 
-Before naming the concept, ask:
+## Notice
 
-- What data went in?
-- What changed?
-- Which function probably made the change?
+Each result came from deterministic code, not model guessing.
+
+| Tool | Simple meaning |
+|---|---|
+| `equation_solver_tool` | Solve a small exact equation. |
+| `text_analyzer_tool` | Count and summarize text features. |
+| `source_triage_tool` | Label source quality signals. |
 
 ## Name The Concept
 
-Tools are deterministic functions a workflow can call when it needs reliable work.
+A tool is a callable capability outside the model.
 
-## Flow
-
-```mermaid
-graph TD
-QUESTION["Need exact work"] --> TOOL["tool function"]
-TOOL --> RESULT["tool result"]
-RESULT --> STATE["state can store result"]
+```python
+def source_triage_tool(source):
+    if "official" in source.lower():
+        return "high-priority"
+    return "needs verification"
 ```
 
-## Why This Module Is Inductive
+The graph stores the tool result as an observation in state.
 
-Yes. Students can see why tools are useful before hearing the formal definition.
+## Check Yourself
+
+Which output would be risky for a model to guess without a tool?
